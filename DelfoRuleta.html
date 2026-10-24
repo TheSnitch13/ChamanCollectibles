@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ruleta Mística - Chaman Collectibles</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    colors: {
+                        chaman: {
+                            bg: '#000105',        /* Fondo principal */
+                            card: '#080a14',      /* Tarjetas oscuras */
+                            border: '#1d2238',    /* Bordes secundarios */
+                            blue: '#136FD7',      /* Azul eléctrico */
+                            violet: '#531BD0',    /* Violeta acento */
+                            cyan: '#25CCE3',      /* Cian brillo */
+                            jade: '#29C193',      /* Verde jade */
+                            gold: '#D3AD71'       /* Dorado marco premium */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000105;
+            background-image: 
+                radial-gradient(circle at 50% 12%, rgba(83, 27, 208, 0.28) 0%, transparent 55%),
+                radial-gradient(circle at 85% 80%, rgba(37, 204, 227, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 15% 85%, rgba(41, 193, 147, 0.15) 0%, transparent 45%);
+            color: #f1f5f9;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glass Panels with Gold / Neon Glows */
+        .glass-panel {
+            background: rgba(8, 10, 20, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(211, 173, 113, 0.35);
+            box-shadow: 0 10px 30px rgba(0, 1, 5, 0.9);
+        }
+
+        .gold-frame {
+            border: 1px solid #D3AD71;
+            box-shadow: 0 0 15px rgba(211, 173, 113, 0.3);
+        }
+
+        .glow-cyan {
+            text-shadow: 0 0 10px rgba(37, 204, 227, 0.8), 0 0 20px rgba(37, 204, 227, 0.4);
+        }
+
+        .glow-gold {
+            text-shadow: 0 0 10px rgba(211, 173, 113, 0.8), 0 0 20px rgba(211, 173, 113, 0.4);
+        }
+
+        .glow-violet {
+            text-shadow: 0 0 10px rgba(83, 27, 208, 0.8), 0 0 20px rgba(83, 27, 208, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000105;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1d2238;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #531BD0;
+        }
+
+        /* Pulsing Frame Animation */
+        @keyframes goldPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(211, 173, 113, 0.4), 0 0 40px rgba(37, 204, 227, 0.25); }
+            50% { box-shadow: 0 0 35px rgba(211, 173, 113, 0.75), 0 0 55px rgba(83, 27, 208, 0.45); }
+        }
+
+        .animate-gold-pulse {
+            animation: goldPulse 3.5s infinite ease-in-out;
+        }
+
+        /* Pointer Animation */
+        @keyframes pointerBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+        .animate-pointer {
+            animation: pointerBounce 0.9s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 flex flex-col justify-between items-center select-none">
+
+    <!-- HEADER / BRANDING WITH CIRCULAR LOGO -->
+    <header class="w-full max-w-7xl flex flex-col sm:flex-row items-center justify-between mb-4 pb-4 border-b border-chaman-gold/30 gap-4">
+        <div class="flex items-center gap-4">
+            <!-- Header Emblem with Strict Circle CSS Cropping -->
+            <div class="relative w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-chaman-gold via-chaman-cyan to-chaman-violet shadow-[0_0_20px_rgba(37,204,227,0.4)] flex-shrink-0">
+                <img id="headerLogoImg" src="" alt="Chaman Collectibles Logo" 
+                    class="w-full h-full object-cover rounded-full border-2 border-chaman-gold bg-chaman-bg">
+            </div>
+
+            <div>
+                <h1 class="font-orbitron text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-chaman-cyan via-chaman-jade to-chaman-gold glow-cyan uppercase">
+                    CHAMAN <span class="text-chaman-gold glow-gold">COLLECTIBLES</span>
+                </h1>
+                <p class="text-xs md:text-sm text-gray-300 font-semibold tracking-widest uppercase flex items-center gap-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-chaman-jade animate-pulse"></span>
+                    Ruleta Mística TCG &amp; Selección Mística
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Header Badges -->
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5 bg-chaman-card/90 border border-chaman-gold/50 px-4 py-2.5 rounded-2xl shadow-[0_0_15px_rgba(211,173,113,0.2)]">
+                <i class="fa-solid fa-gem text-chaman-gold text-lg"></i>
+                <div class="text-left">
+                    <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Premios Restantes</div>
+                    <div id="totalPremiosBadge" class="font-orbitron font-extrabold text-xl text-chaman-jade glow-cyan leading-none">0</div>
+                </div>
+            </div>
+
+            <button id="audioToggleBtn" onclick="toggleAudio()" class="w-12 h-12 bg-chaman-card border border-chaman-cyan/50 hover:border-chaman-cyan text-chaman-cyan rounded-2xl transition-all duration-300 shadow-[0_0_15px_rgba(37,204,227,0.2)] flex items-center justify-center active:scale-95">
+                <i id="audioIcon" class="fa-solid fa-volume-high text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN GRID CONTAINER (OPTIMIZED FOR TABLET 2-COLUMN) -->
+    <main class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-12 gap-6 items-start my-auto">
+        
+        <!-- LEFT COLUMN: CANVAS ROULETTE & MAIN BUTTONS (7 cols on tablet) -->
+        <section class="md:col-span-7 flex flex-col items-center justify-center glass-panel p-4 md:p-6 rounded-3xl relative overflow-hidden">
+            
+            <!-- Ambient Glows -->
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-chaman-violet/30 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-chaman-cyan/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Golden Pointer Arrow -->
+            <div class="relative z-20 -mb-6 flex flex-col items-center">
+                <div class="animate-pointer filter drop-shadow-[0_0_15px_rgba(211,173,113,0.95)]">
+                    <svg width="48" height="52" viewBox="0 0 48 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 52L0.617317 12L47.3827 12L24 52Z" fill="url(#goldPointerGrad)"/>
+                        <path d="M24 40L9 14L39 14L24 40Z" fill="#000105"/>
+                        <circle cx="24" cy="14" r="6" fill="#25CCE3" stroke="#D3AD71" stroke-width="2"/>
+                        <defs>
+                            <linearGradient id="goldPointerGrad" x1="24" y1="12" x2="24" y2="52" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#D3AD71"/>
+                                <stop offset="0.5" stop-color="#25CCE3"/>
+                                <stop offset="1" stop-color="#531BD0"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Wheel Canvas Frame -->
+            <div class="relative w-full max-w-[480px] aspect-square flex items-center justify-center my-2 p-2">
+                <div class="absolute inset-0 rounded-full border-2 border-chaman-gold/60 animate-gold-pulse pointer-events-none"></div>
+                <canvas id="wheelCanvas" class="w-full h-full cursor-pointer rounded-full transition-transform duration-100 ease-out"></canvas>
+            </div>
+
+            <!-- MAIN TOUCH BUTTONS FOR TABLET (Min height 54px) -->
+            <div class="w-full flex flex-col sm:flex-row items-center justify-center gap-3 mt-4 z-10">
+                <button id="spinBtn" onclick="spinWheel()" 
+                    class="w-full sm:w-2/3 h-16 bg-gradient-to-r from-chaman-blue via-chaman-violet to-chaman-blue hover:brightness-110 text-white font-orbitron font-black text-xl md:text-2xl rounded-2xl shadow-[0_0_30px_rgba(19,111,215,0.6)] hover:shadow-[0_0_40px_rgba(37,204,227,0.8)] transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-3 border border-chaman-gold/50 tracking-wider">
+                    <i class="fa-solid fa-play text-chaman-gold text-2xl"></i>
+                    GIRAR RULETA
+                </button>
+
+                <button id="shuffleBtn" onclick="shuffleWheel()" 
+                    class="w-full sm:w-1/3 h-16 bg-chaman-card border border-chaman-cyan/50 hover:border-chaman-cyan text-chaman-cyan hover:bg-chaman-cyan/10 font-orbitron font-bold text-base rounded-2xl transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,204,227,0.25)]">
+                    <i class="fa-solid fa-shuffle text-chaman-jade text-lg"></i>
+                    MEZCLAR
+                </button>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: LOGO URL, AUTO-REMOVE, PREMIOS FORM, LIST & HISTORY (5 cols on tablet) -->
+        <section class="md:col-span-5 flex flex-col gap-5">
+
+            <!-- CUSTOM LOGO URL INPUT PANEL -->
+            <div class="glass-panel p-4 rounded-3xl border border-chaman-gold/40 shadow-[0_0_15px_rgba(211,173,113,0.15)]">
+                <label class="block text-xs text-chaman-gold font-bold mb-1.5 uppercase tracking-wider flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-link text-chaman-cyan"></i> URL del Logo Personalizado
+                    </span>
+                    <span class="text-[10px] text-gray-400 font-normal">Círculo automático</span>
+                </label>
+                <div class="flex gap-2">
+                    <input type="url" id="logoUrlInput" placeholder= C:\Users\alanh\Downloads\DelfoLogo.jpeg"
+                        oninput="handleLogoUrlChange(this.value)"
+                        class="w-full h-11 bg-chaman-bg/90 border border-chaman-border focus:border-chaman-cyan text-white text-xs rounded-xl px-3 outline-none transition-all duration-200 font-semibold placeholder-gray-500">
+                    <button onclick="resetLogoUrl()" title="Restablecer logo original" class="h-11 px-3.5 bg-chaman-card border border-chaman-border hover:border-chaman-gold text-chaman-gold rounded-xl transition-all duration-200 flex items-center justify-center active:scale-95">
+                        <i class="fa-solid fa-rotate-left text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- AUTO-ELIMINATE WINNER TOGGLE SWITCH -->
+            <div class="glass-panel p-4 rounded-3xl border border-chaman-gold/40 shadow-[0_0_20px_rgba(211,173,113,0.15)]">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div id="toggleIconBg" class="w-11 h-11 rounded-2xl bg-gradient-to-br from-chaman-violet/40 to-chaman-blue/30 border border-chaman-cyan/40 flex items-center justify-center text-chaman-cyan shadow-[0_0_10px_rgba(37,204,227,0.3)] flex-shrink-0 transition-all duration-300">
+                            <i id="toggleIcon" class="fa-solid fa-fire text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="font-orbitron font-bold text-sm text-white flex items-center gap-2">
+                                Auto-Eliminar Premio
+                            </div>
+                            <div class="text-xs text-gray-300 font-semibold">Resta 1 unidad al salir ganador</div>
+                        </div>
+                    </div>
+
+                    <!-- Custom Tablet Switch -->
+                    <label class="relative inline-flex items-center cursor-pointer select-none">
+                        <input type="checkbox" id="autoRemoveToggle" class="sr-only peer" onchange="handleToggleChange(this)">
+                        <div class="w-16 h-9 bg-chaman-bg border-2 border-chaman-border rounded-full peer peer-checked:border-chaman-jade peer-checked:bg-gradient-to-r peer-checked:from-chaman-violet peer-checked:to-chaman-jade transition-all duration-300 shadow-inner"></div>
+                        <div class="absolute left-1 top-1 bg-gray-400 peer-checked:bg-chaman-gold peer-checked:translate-x-7 w-7 h-7 rounded-full transition-all duration-300 shadow-[0_0_12px_rgba(41,193,147,0.9)] flex items-center justify-center">
+                            <span id="toggleThumbDot" class="w-2.5 h-2.5 rounded-full bg-chaman-bg"></span>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Live Status Badge -->
+                <div class="mt-3 pt-2.5 border-t border-chaman-border/80 flex items-center justify-between text-xs font-bold">
+                    <span class="text-gray-400 uppercase tracking-wider text-[11px]">Estado Auto-Eliminar:</span>
+                    <span id="toggleStatusBadge" class="px-3 py-0.5 rounded-full bg-chaman-violet/20 text-chaman-violet border border-chaman-violet/50 font-orbitron text-[11px]">
+                        <i class="fa-solid fa-circle-xmark mr-1"></i> DESACTIVADO
+                    </span>
+                </div>
+            </div>
+
+            <!-- CREACIÓN DE PREMIOS FORM -->
+            <div class="glass-panel p-5 rounded-3xl relative">
+                <h2 class="font-orbitron font-bold text-base text-chaman-cyan glow-cyan mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-square-plus text-chaman-jade text-lg"></i>
+                    Creación de Premios
+                </h2>
+
+                <form id="addSpotForm" onsubmit="handleAddSpot(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-gray-300 font-bold mb-1 uppercase tracking-wider">Nombre del Premio / Ítem</label>
+                        <input type="text" id="spotNameInput" placeholder="Ej. Charizard Holo / Premio #1" required
+                            class="w-full h-12 bg-chaman-bg/90 border border-chaman-border focus:border-chaman-cyan text-white text-sm rounded-xl px-4 outline-none transition-all duration-200 font-semibold placeholder-gray-500">
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-3">
+                        <div class="col-span-5">
+                            <label class="block text-xs text-gray-300 font-bold mb-1 uppercase tracking-wider">Cantidad</label>
+                            <input type="number" id="spotQtyInput" min="1" max="100" value="1" required
+                                class="w-full h-12 bg-chaman-bg/90 border border-chaman-border focus:border-chaman-cyan text-chaman-gold text-base rounded-xl px-3 outline-none transition-all duration-200 text-center font-orbitron font-extrabold">
+                        </div>
+
+                        <div class="col-span-7 flex items-end">
+                            <button type="submit" class="w-full h-12 bg-gradient-to-r from-chaman-blue to-chaman-cyan hover:brightness-110 text-white font-orbitron font-extrabold text-sm rounded-xl transition-all duration-200 shadow-[0_0_18px_rgba(19,111,215,0.4)] flex items-center justify-center gap-2 active:scale-95 border border-chaman-gold/30">
+                                <i class="fa-solid fa-plus text-base text-chaman-gold"></i> AGREGAR
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- PRESET BUTTONS -->
+                <div class="mt-4 pt-3 border-t border-chaman-border/80 flex items-center justify-between gap-2">
+                    <button onclick="loadDemoData()" class="h-10 text-xs bg-chaman-violet/25 hover:bg-chaman-violet/40 border border-chaman-violet/60 text-chaman-cyan px-3.5 rounded-xl transition-all flex items-center gap-2 font-bold active:scale-95">
+                        <i class="fa-solid fa-wand-magic-sparkles text-chaman-gold"></i> Demo TCG
+                    </button>
+                    <button onclick="clearAllSpots()" class="h-10 text-xs bg-red-500/15 hover:bg-red-500/30 border border-red-500/40 text-red-400 px-3.5 rounded-xl transition-all flex items-center gap-2 font-bold active:scale-95">
+                        <i class="fa-solid fa-trash-can"></i> Vaciar Todo
+                    </button>
+                </div>
+            </div>
+
+            <!-- LISTADO DE PREMIOS ACTIVOS -->
+            <div class="glass-panel p-5 rounded-3xl flex flex-col max-h-[250px]">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-orbitron font-bold text-xs text-chaman-gold flex items-center gap-2 uppercase tracking-wider">
+                        <i class="fa-solid fa-list-check text-chaman-cyan"></i>
+                        Listado de Premios
+                    </h3>
+                    <span id="uniqueItemCount" class="text-xs text-gray-300 font-bold bg-chaman-bg px-2.5 py-1 rounded-lg border border-chaman-border">0 tipos</span>
+                </div>
+
+                <div id="spotsContainer" class="overflow-y-auto space-y-2 pr-1 flex-1">
+                    <!-- Premios dinámicos aquí -->
+                </div>
+            </div>
+
+            <!-- HISTORIAL DE ÚLTIMOS 5 GIROS -->
+            <div class="glass-panel p-5 rounded-3xl">
+                <h3 class="font-orbitron font-bold text-xs text-chaman-violet glow-violet mb-3 flex items-center gap-2 uppercase tracking-wider">
+                    <i class="fa-solid fa-clock-rotate-left text-chaman-gold"></i>
+                    Últimos 5 Ganadores
+                </h3>
+
+                <div id="historyContainer" class="space-y-2">
+                    <div class="text-center py-4 text-gray-500 text-xs italic">
+                        Sin giros registrados.
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- GANADOR TCG CELEBRATION MODAL -->
+    <div id="winnerModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-panel p-6 md:p-8 rounded-3xl max-w-md w-full text-center relative transform scale-90 transition-all duration-300 id-modal-card gold-frame">
+            
+            <div class="w-20 h-20 mx-auto -mt-12 bg-gradient-to-tr from-chaman-gold via-chaman-cyan to-chaman-violet rounded-full p-[2px] shadow-[0_0_30px_rgba(211,173,113,0.8)]">
+                <div class="w-full h-full bg-chaman-bg rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-trophy text-3xl text-chaman-gold animate-bounce"></i>
+                </div>
+            </div>
+
+            <span class="inline-block mt-4 text-xs font-orbitron font-black tracking-widest text-chaman-gold uppercase bg-chaman-gold/15 px-4 py-1.5 rounded-full border border-chaman-gold/40">
+                ¡GANADOR MÍSTICO TCG!
+            </span>
+
+            <h2 id="winnerTitle" class="font-orbitron font-black text-2xl md:text-3xl text-white my-4 glow-cyan break-words leading-tight">
+                ---
+            </h2>
+
+            <p id="winnerSubtext" class="text-xs text-gray-300 mb-6 font-semibold">
+                ¡El destino místico de Chaman Collectibles ha decidido!
+            </p>
+
+            <button onclick="closeWinnerModal()" class="w-full h-14 bg-gradient-to-r from-chaman-blue via-chaman-jade to-chaman-gold hover:brightness-110 text-chaman-bg font-orbitron font-black text-lg rounded-2xl transition-all shadow-[0_0_25px_rgba(41,193,147,0.6)] active:scale-95 border border-chaman-gold/50">
+                CONTINUAR
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPT APPLICATION LOGIC -->
+    <script>
+        // ==========================================
+        // STRICT USER HEX COLOR PALETTE
+        // ==========================================
+        const PALETTE = {
+            bg: '#000105',      // Negro azulado
+            blue: '#136FD7',    // Azul eléctrico
+            violet: '#531BD0',  // Violeta
+            cyan: '#25CCE3',    // Cian
+            jade: '#29C193',    // Verde jade
+            gold: '#D3AD71'     // Dorado
+        };
+
+        const THEME_COLORS = [
+            { bg: PALETTE.blue, text: '#ffffff', stroke: '#0d4da1' },
+            { bg: PALETTE.violet, text: '#ffffff', stroke: '#390e9c' },
+            { bg: PALETTE.cyan, text: '#000105', stroke: '#1ab0c4' },
+            { bg: PALETTE.jade, text: '#000105', stroke: '#1ea078' },
+            { bg: PALETTE.gold, text: '#000105', stroke: '#a8864b' }
+        ];
+
+        // Default SVG Fallback Emblem
+        const DEFAULT_LOGO_SVG = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="48" fill="#000105" stroke="#D3AD71" stroke-width="4"/>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#25CCE3" stroke-width="2" stroke-dasharray="5 3"/>
+            <path d="M 10 50 A 40 40 0 0 1 90 50 Z" fill="#531BD0"/>
+            <path d="M 10 50 A 40 40 0 0 0 90 50 Z" fill="#080a14"/>
+            <line x1="10" y1="50" x2="90" y2="50" stroke="#D3AD71" stroke-width="5"/>
+            <circle cx="50" cy="50" r="14" fill="#000105" stroke="#D3AD71" stroke-width="4"/>
+            <circle cx="50" cy="50" r="7" fill="#25CCE3"/>
+        </svg>`)))}`;
+
+        // ==========================================
+        // STATE
+        // ==========================================
+        let spots = [];
+        let history = [];
+        let isSpinning = false;
+        let isShuffling = false;
+        let soundEnabled = true;
+
+        let currentAngle = 0;
+        let spinTimeout = null;
+        let spinAngleStart = 0;
+        let spinTime = 0;
+        let spinTimeTotal = 0;
+        let lastAudioTickSlice = -1;
+
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Dynamic Logo Management
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+
+        logoImg.onload = function() {
+            document.getElementById('headerLogoImg').src = logoImg.src;
+            drawWheel();
+        };
+
+        logoImg.onerror = function() {
+            showToast('No se pudo cargar la URL del logo. Se usará el logo predeterminado.');
+            logoImg.src = DEFAULT_LOGO_SVG;
+        };
+
+        function setLogoSource(url) {
+            if (!url || url.trim() === '') {
+                logoImg.src = DEFAULT_LOGO_SVG;
+            } else {
+                logoImg.src = url.trim();
+            }
+        }
+
+        function handleLogoUrlChange(val) {
+            setLogoSource(val);
+        }
+
+        function resetLogoUrl() {
+            document.getElementById('logoUrlInput').value = '';
+            setLogoSource(DEFAULT_LOGO_SVG);
+            showToast('Logo restablecido al original.');
+        }
+
+        function setupCanvasDPI() {
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            drawWheel();
+        }
+
+        window.addEventListener('resize', setupCanvasDPI);
+
+        // ==========================================
+        // SYNTHESIZED WEB AUDIO ENGINE
+        // ==========================================
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtxClass) {
+                    audioCtx = new AudioCtxClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('audioIcon');
+            const btn = document.getElementById('audioToggleBtn');
+            if (soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high text-xl';
+                btn.classList.remove('border-red-500/50', 'text-red-400');
+                btn.classList.add('border-chaman-cyan/50', 'text-chaman-cyan');
+                playTickSound();
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-xl';
+                btn.classList.add('border-red-500/50', 'text-red-400');
+                btn.classList.remove('border-chaman-cyan/50', 'text-chaman-cyan');
+            }
+        }
+
+        function playTickSound() {
+            if (!soundEnabled) return;
+            try {
+                const actx = getAudioContext();
+                if (!actx) return;
+
+                const osc = actx.createOscillator();
+                const gain = actx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(680, actx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(160, actx.currentTime + 0.035);
+
+                gain.gain.setValueAtTime(0.2, actx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.035);
+
+                osc.connect(gain);
+                gain.connect(actx.destination);
+
+                osc.start();
+                osc.stop(actx.currentTime + 0.035);
+            } catch(e) {}
+        }
+
+        function playShuffleSound() {
+            if (!soundEnabled) return;
+            try {
+                const actx = getAudioContext();
+                if (!actx) return;
+
+                for (let i = 0; i < 7; i++) {
+                    setTimeout(() => {
+                        const osc = actx.createOscillator();
+                        const gain = actx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(350 + (i * 120), actx.currentTime);
+                        gain.gain.setValueAtTime(0.1, actx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.04);
+                        osc.connect(gain);
+                        gain.connect(actx.destination);
+                        osc.start();
+                        osc.stop(actx.currentTime + 0.04);
+                    }, i * 35);
+                }
+            } catch(e) {}
+        }
+
+        function playWinFanfare() {
+            if (!soundEnabled) return;
+            try {
+                const actx = getAudioContext();
+                if (!actx) return;
+
+                const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+                notes.forEach((freq, idx) => {
+                    setTimeout(() => {
+                        const osc = actx.createOscillator();
+                        const gain = actx.createGain();
+
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(freq, actx.currentTime);
+
+                        gain.gain.setValueAtTime(0.25, actx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.45);
+
+                        osc.connect(gain);
+                        gain.connect(actx.destination);
+
+                        osc.start();
+                        osc.stop(actx.currentTime + 0.45);
+                    }, idx * 85);
+                });
+            } catch(e) {}
+        }
+
+        // ==========================================
+        // AUTO-ELIMINATE TOGGLE HANDLER
+        // ==========================================
+        function handleToggleChange(checkbox) {
+            const badge = document.getElementById('toggleStatusBadge');
+            const iconBg = document.getElementById('toggleIconBg');
+
+            if (checkbox.checked) {
+                badge.className = 'px-3 py-0.5 rounded-full bg-chaman-jade/20 text-chaman-jade border border-chaman-jade/40 font-orbitron text-[11px] glow-cyan';
+                badge.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> ACTIVADO';
+
+                iconBg.className = 'w-11 h-11 rounded-2xl bg-gradient-to-br from-chaman-jade/40 to-chaman-cyan/30 border border-chaman-jade/50 flex items-center justify-center text-chaman-jade shadow-[0_0_15px_rgba(41,193,147,0.4)] flex-shrink-0 transition-all duration-300';
+                playTickSound();
+            } else {
+                badge.className = 'px-3 py-0.5 rounded-full bg-chaman-violet/20 text-chaman-violet border border-chaman-violet/50 font-orbitron text-[11px]';
+                badge.innerHTML = '<i class="fa-solid fa-circle-xmark mr-1"></i> DESACTIVADO';
+
+                iconBg.className = 'w-11 h-11 rounded-2xl bg-gradient-to-br from-chaman-violet/40 to-chaman-blue/30 border border-chaman-cyan/40 flex items-center justify-center text-chaman-cyan shadow-[0_0_10px_rgba(37,204,227,0.3)] flex-shrink-0 transition-all duration-300';
+            }
+        }
+
+        // ==========================================
+        // CANVAS WHEEL DRAWING LOGIC
+        // ==========================================
+        function drawWheel() {
+            const rect = canvas.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            if (width === 0 || height === 0) return;
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const outerRadius = width / 2 - 18;
+            const innerRadius = Math.max(45, width * 0.18);
+
+            ctx.clearRect(0, 0, width, height);
+
+            const numSlices = spots.length;
+
+            if (numSlices === 0) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
+                ctx.fillStyle = '#080a14';
+                ctx.fill();
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = PALETTE.gold;
+                ctx.stroke();
+
+                ctx.fillStyle = PALETTE.cyan;
+                ctx.font = 'bold 14px Orbitron';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('AGREGA PREMIOS PARA GIRAR', centerX, centerY);
+                ctx.restore();
+                return;
+            }
+
+            const sliceAngle = (2 * Math.PI) / numSlices;
+
+            // 1. Draw Vibrant Gradient Slices
+            for (let i = 0; i < numSlices; i++) {
+                const angle = currentAngle + i * sliceAngle;
+                const colorObj = THEME_COLORS[i % THEME_COLORS.length];
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, outerRadius, angle, angle + sliceAngle);
+                ctx.closePath();
+
+                const midAngle = angle + sliceAngle / 2;
+                const gradX = centerX + Math.cos(midAngle) * outerRadius;
+                const gradY = centerY + Math.sin(midAngle) * outerRadius;
+                const grad = ctx.createLinearGradient(centerX, centerY, gradX, gradY);
+                grad.addColorStop(0, '#000105');
+                grad.addColorStop(0.35, colorObj.bg);
+                grad.addColorStop(1, colorObj.stroke);
+
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = '#000105';
+                ctx.stroke();
+
+                // Slice Text Rendering (Reduced Font Size so names fit comfortably)
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle + sliceAngle / 2);
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = colorObj.text;
+
+                // REDUCED TIPOGRAPHY SIZING
+                let fontSize = Math.max(9, Math.min(13, 200 / numSlices));
+                ctx.font = `bold ${fontSize}px Orbitron, Rajdhani, sans-serif`;
+
+                let text = spots[i];
+                const maxTextWidth = outerRadius - innerRadius - 18;
+                if (ctx.measureText(text).width > maxTextWidth) {
+                    while (text.length > 3 && ctx.measureText(text + '...').width > maxTextWidth) {
+                        text = text.slice(0, -1);
+                    }
+                    text += '...';
+                }
+
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+                ctx.shadowBlur = 4;
+                ctx.fillText(text, outerRadius - 16, 0);
+                ctx.restore();
+
+                ctx.restore();
+            }
+
+            // 2. Golden Beveled Outer Frame
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = PALETTE.gold;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, outerRadius + 4, 0, 2 * Math.PI);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = PALETTE.cyan;
+            ctx.stroke();
+
+            // Outer Glowing Gems (Cian & Jade)
+            const numDots = Math.min(24, Math.max(12, numSlices));
+            for (let d = 0; d < numDots; d++) {
+                const dotAngle = (d * (2 * Math.PI)) / numDots;
+                const dotX = centerX + Math.cos(dotAngle) * outerRadius;
+                const dotY = centerY + Math.sin(dotAngle) * outerRadius;
+
+                ctx.beginPath();
+                ctx.arc(dotX, dotY, 3.5, 0, 2 * Math.PI);
+                ctx.fillStyle = (d % 2 === 0) ? PALETTE.cyan : PALETTE.jade;
+                ctx.shadowColor = (d % 2 === 0) ? PALETTE.cyan : PALETTE.jade;
+                ctx.shadowBlur = 6;
+                ctx.fill();
+            }
+            ctx.restore();
+
+            // 3. Central Golden Medallion with Strictly Cropped Circular Logo
+            ctx.save();
+            
+            // Base Medallion Background
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = PALETTE.bg;
+            ctx.shadowColor = PALETTE.cyan;
+            ctx.shadowBlur = 18;
+            ctx.fill();
+
+            // CANVAS STRICT CIRCLE CLIPPING FOR THE CENTER LOGO
+            if (logoImg.complete && logoImg.naturalWidth !== 0) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, innerRadius - 3, 0, 2 * Math.PI);
+                ctx.clip(); // <--- Strict Circular Crop
+
+                ctx.drawImage(
+                    logoImg, 
+                    centerX - innerRadius + 3, 
+                    centerY - innerRadius + 3, 
+                    (innerRadius - 3) * 2, 
+                    (innerRadius - 3) * 2
+                );
+                ctx.restore();
+            }
+
+            // Outer Golden Hub Ring
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+            ctx.lineWidth = 3.5;
+            ctx.strokeStyle = PALETTE.gold;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, innerRadius + 2, 0, 2 * Math.PI);
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = PALETTE.cyan;
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // ==========================================
+        // SPIN MECHANICS
+        // ==========================================
+        function spinWheel() {
+            if (isSpinning || isShuffling) return;
+            if (spots.length === 0) {
+                showToast('Agrega al menos 1 premio a la ruleta para girar.');
+                return;
+            }
+
+            getAudioContext();
+            isSpinning = true;
+
+            const spinBtn = document.getElementById('spinBtn');
+            spinBtn.disabled = true;
+            spinBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            spinAngleStart = Math.random() * 15 + 22;
+            spinTime = 0;
+            spinTimeTotal = Math.random() * 3000 + 4800;
+            lastAudioTickSlice = -1;
+
+            rotateWheel();
+        }
+
+        function rotateWheel() {
+            spinTime += 20;
+            if (spinTime >= spinTimeTotal) {
+                stopRotateWheel();
+                return;
+            }
+
+            const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+            currentAngle += (spinAngle * Math.PI) / 180;
+            drawWheel();
+
+            // Ticking Calculation
+            const numSlices = spots.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+            let normalizedAngle = (1.5 * Math.PI - (currentAngle % (2 * Math.PI))) % (2 * Math.PI);
+            if (normalizedAngle < 0) normalizedAngle += 2 * Math.PI;
+
+            const currentSlice = Math.floor(normalizedAngle / sliceAngle);
+            if (currentSlice !== lastAudioTickSlice) {
+                playTickSound();
+                lastAudioTickSlice = currentSlice;
+            }
+
+            spinTimeout = requestAnimationFrame(rotateWheel);
+        }
+
+        function stopRotateWheel() {
+            cancelAnimationFrame(spinTimeout);
+            isSpinning = false;
+
+            const spinBtn = document.getElementById('spinBtn');
+            spinBtn.disabled = false;
+            spinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            // Winner Calculation
+            const numSlices = spots.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+            let normalizedAngle = (1.5 * Math.PI - (currentAngle % (2 * Math.PI))) % (2 * Math.PI);
+            if (normalizedAngle < 0) normalizedAngle += 2 * Math.PI;
+
+            const winningIndex = Math.floor(normalizedAngle / sliceAngle);
+            const winningItem = spots[winningIndex];
+
+            // AUTO-REMOVE LOGIC
+            const autoRemoveChecked = document.getElementById('autoRemoveToggle').checked;
+            let subtextMsg = '¡El destino místico de Chaman Collectibles ha decidido!';
+
+            if (autoRemoveChecked) {
+                spots.splice(winningIndex, 1);
+                
+                const remainingCount = spots.filter(s => s === winningItem).length;
+                if (remainingCount > 0) {
+                    subtextMsg = `¡Premio descontado! Quedan ${remainingCount} disponibles de este ítem.`;
+                } else {
+                    subtextMsg = `¡Premio entregado! Este ítem se ha agotado por completo de la ruleta.`;
+                }
+
+                updateUI();
+            }
+
+            playWinFanfare();
+            triggerConfetti();
+            openWinnerModal(winningItem, subtextMsg);
+            addHistoryRecord(winningItem);
+        }
+
+        function easeOut(t, b, c, d) {
+            const ts = (t /= d) * t;
+            const tc = ts * t;
+            return b + c * (tc + -3 * ts + 3 * t);
+        }
+
+        // ==========================================
+        // SHUFFLE FUNCTION
+        // ==========================================
+        function shuffleWheel() {
+            if (isSpinning || isShuffling) return;
+            if (spots.length < 2) {
+                showToast('Se necesitan al menos 2 premios para mezclar.');
+                return;
+            }
+
+            isShuffling = true;
+            playShuffleSound();
+
+            for (let i = spots.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [spots[i], spots[j]] = [spots[j], spots[i]];
+            }
+
+            let count = 0;
+            const interval = setInterval(() => {
+                currentAngle += 0.35;
+                drawWheel();
+                count++;
+                if (count >= 16) {
+                    clearInterval(interval);
+                    isShuffling = false;
+                    updateUI();
+                }
+            }, 25);
+        }
+
+        // ==========================================
+        // PREMIOS CREATION & UI MANAGEMENT
+        // ==========================================
+        function handleAddSpot(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('spotNameInput');
+            const qtyInput = document.getElementById('spotQtyInput');
+
+            const text = nameInput.value.trim();
+            const qty = parseInt(qtyInput.value) || 1;
+
+            if (!text) return;
+
+            for (let i = 0; i < qty; i++) {
+                spots.push(text);
+            }
+
+            nameInput.value = '';
+            qtyInput.value = '1';
+            nameInput.focus();
+
+            playTickSound();
+            updateUI();
+        }
+
+        function removeSpotItem(spotText) {
+            spots = spots.filter(item => item !== spotText);
+            playTickSound();
+            updateUI();
+        }
+
+        function clearAllSpots() {
+            if (spots.length === 0) return;
+            spots = [];
+            playTickSound();
+            updateUI();
+        }
+
+        function loadDemoData() {
+            spots = [
+                'Charizard Holo Base Set',
+                'Charizard Holo Base Set',
+                'Rayquaza VMAX Alt Art',
+                'Gengar Star Holo',
+                'Gengar Star Holo',
+                'Pikachu Illustrator Promo',
+                'Pikachu Illustrator Promo',
+                'Mewtwo Gold Star',
+                'Umbreon Gold Star'
+            ];
+            playTickSound();
+            updateUI();
+        }
+
+        function updateUI() {
+            // RENAMED BADGE TO PREMIOS RESTANTES
+            document.getElementById('totalPremiosBadge').innerText = spots.length;
+
+            const counts = {};
+            spots.forEach(item => {
+                counts[item] = (counts[item] || 0) + 1;
+            });
+
+            const uniqueKeys = Object.keys(counts);
+            document.getElementById('uniqueItemCount').innerText = `${uniqueKeys.length} tipos`;
+
+            const container = document.getElementById('spotsContainer');
+            container.innerHTML = '';
+
+            if (spots.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 text-gray-500 text-xs italic">
+                        No hay premios agregados.
+                    </div>
+                `;
+            } else {
+                uniqueKeys.forEach((key, idx) => {
+                    const color = THEME_COLORS[idx % THEME_COLORS.length];
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'flex items-center justify-between bg-chaman-bg/90 border border-chaman-border p-2.5 rounded-xl hover:border-chaman-cyan/50 transition-all';
+                    itemEl.innerHTML = `
+                        <div class="flex items-center gap-2.5 overflow-hidden pr-2">
+                            <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${color.bg}"></span>
+                            <span class="text-xs font-bold text-gray-200 truncate">${escapeHtml(key)}</span>
+                            <span class="text-[11px] bg-chaman-violet/30 text-chaman-cyan px-2 py-0.5 rounded-full border border-chaman-violet/50 font-extrabold font-orbitron">
+                                x${counts[key]}
+                            </span>
+                        </div>
+                        <button onclick="removeSpotItem('${escapeJsString(key)}')" class="text-gray-500 hover:text-red-400 p-1.5 transition-colors">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                    `;
+                    container.appendChild(itemEl);
+                });
+            }
+
+            drawWheel();
+        }
+
+        // ==========================================
+        // HISTORY LOG
+        // ==========================================
+        function addHistoryRecord(item) {
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            history.unshift({ item, time: timeStr });
+            if (history.length > 5) history.pop();
+
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyContainer');
+            container.innerHTML = '';
+
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-gray-500 text-xs italic">
+                        Sin giros registrados.
+                    </div>
+                `;
+                return;
+            }
+
+            history.forEach((record, index) => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between bg-chaman-card/90 border border-chaman-gold/40 px-3 py-2 rounded-xl text-xs shadow-sm';
+                row.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <span class="font-orbitron font-extrabold text-chaman-gold text-[11px]">#${index + 1}</span>
+                        <span class="font-bold text-gray-100 truncate">${escapeHtml(record.item)}</span>
+                    </div>
+                    <span class="text-[10px] text-gray-400 font-mono ml-2 flex-shrink-0">${record.time}</span>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // ==========================================
+        // WINNER MODAL & CONFETTI
+        // ==========================================
+        function openWinnerModal(item, subtext) {
+            const modal = document.getElementById('winnerModal');
+            document.getElementById('winnerTitle').innerText = item;
+            document.getElementById('winnerSubtext').innerText = subtext;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.id-modal-card').classList.remove('scale-90');
+            modal.querySelector('.id-modal-card').classList.add('scale-100');
+        }
+
+        function closeWinnerModal() {
+            const modal = document.getElementById('winnerModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.id-modal-card').classList.remove('scale-100');
+            modal.querySelector('.id-modal-card').classList.add('scale-90');
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 110,
+                    spread: 85,
+                    origin: { y: 0.6 },
+                    colors: [PALETTE.blue, PALETTE.violet, PALETTE.cyan, PALETTE.jade, PALETTE.gold]
+                });
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function escapeJsString(str) {
+            return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 z-50 bg-chaman-card border border-chaman-cyan text-chaman-cyan text-xs font-bold px-4 py-3 rounded-2xl shadow-[0_0_20px_rgba(37,204,227,0.4)] transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2';
+            toast.innerHTML = `<i class="fa-solid fa-circle-info text-chaman-gold text-sm"></i> ${escapeHtml(msg)}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.classList.remove('translate-y-10', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        window.onload = function() {
+            setLogoSource('');
+            setupCanvasDPI();
+            loadDemoData();
+        };
+    </script>
+</body>
+</html>
