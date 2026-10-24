@@ -116,53 +116,32 @@
         }
     </style>
 </head>
-<body class="p-3 md:p-6 flex flex-col justify-between items-center select-none">
-
-    <!-- HEADER / BRANDING WITH CIRCULAR LOGO -->
-    <header class="w-full max-w-7xl flex flex-col sm:flex-row items-center justify-between mb-4 pb-4 border-b border-chaman-gold/30 gap-4">
-        <div class="flex items-center gap-4">
-            <!-- Header Emblem with Strict Circle CSS Cropping -->
-            <div class="relative w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-chaman-gold via-chaman-cyan to-chaman-violet shadow-[0_0_20px_rgba(37,204,227,0.4)] flex-shrink-0">
-                <img id="headerLogoImg" src="DelfoLogo.jpeg" alt="Chaman Collectibles Logo" 
-                    class="w-full h-full object-cover rounded-full border-2 border-chaman-gold bg-chaman-bg">
-            </div>
-
-            <div>
-                <h1 class="font-orbitron text-2xl md:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-chaman-cyan via-chaman-jade to-chaman-gold glow-cyan uppercase">
-                    CHAMAN <span class="text-chaman-gold glow-gold">COLLECTIBLES</span>
-                </h1>
-                <p class="text-xs md:text-sm text-gray-300 font-semibold tracking-widest uppercase flex items-center gap-2">
-                    <span class="inline-block w-2 h-2 rounded-full bg-chaman-jade animate-pulse"></span>
-                    Ruleta Mística TCG &amp; Selección Mística
-                </p>
-            </div>
-        </div>
-
-        <!-- Right Header Badges -->
-        <div class="flex items-center gap-3">
-            <div class="flex items-center gap-2.5 bg-chaman-card/90 border border-chaman-gold/50 px-4 py-2.5 rounded-2xl shadow-[0_0_15px_rgba(211,173,113,0.2)]">
-                <i class="fa-solid fa-gem text-chaman-gold text-lg"></i>
-                <div class="text-left">
-                    <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Premios Restantes</div>
-                    <div id="totalPremiosBadge" class="font-orbitron font-extrabold text-xl text-chaman-jade glow-cyan leading-none">0</div>
-                </div>
-            </div>
-
-            <button id="audioToggleBtn" onclick="toggleAudio()" class="w-12 h-12 bg-chaman-card border border-chaman-cyan/50 hover:border-chaman-cyan text-chaman-cyan rounded-2xl transition-all duration-300 shadow-[0_0_15px_rgba(37,204,227,0.2)] flex items-center justify-center active:scale-95">
-                <i id="audioIcon" class="fa-solid fa-volume-high text-xl"></i>
-            </button>
-        </div>
-    </header>
+<body class="p-3 md:p-6 flex flex-col justify-center items-center select-none min-h-screen">
 
     <!-- MAIN GRID CONTAINER (OPTIMIZED FOR TABLET 2-COLUMN) -->
     <main class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-12 gap-6 items-start my-auto">
         
-        <!-- LEFT COLUMN: CANVAS ROULETTE & MAIN BUTTONS (7 cols on tablet) -->
+        <!-- LEFT COLUMN: CANVAS ROULETTE, BADGES & MAIN BUTTONS (7 cols on tablet) -->
         <section class="md:col-span-7 flex flex-col items-center justify-center glass-panel p-4 md:p-6 rounded-3xl relative overflow-hidden">
             
             <!-- Ambient Glows -->
             <div class="absolute -top-20 -left-20 w-64 h-64 bg-chaman-violet/30 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-chaman-cyan/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- TOP STATUS BAR INSIDE WHEEL PANEL (Premios Restantes + Botón de Audio) -->
+            <div class="w-full flex items-center justify-between gap-3 mb-2 z-20">
+                <div class="flex items-center gap-2.5 bg-chaman-card/90 border border-chaman-gold/50 px-4 py-2 rounded-2xl shadow-[0_0_15px_rgba(211,173,113,0.2)]">
+                    <i class="fa-solid fa-gem text-chaman-gold text-lg"></i>
+                    <div class="text-left">
+                        <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Premios Restantes</div>
+                        <div id="totalPremiosBadge" class="font-orbitron font-extrabold text-xl text-chaman-jade glow-cyan leading-none">0</div>
+                    </div>
+                </div>
+
+                <button id="audioToggleBtn" onclick="toggleAudio()" class="w-12 h-12 bg-chaman-card border border-chaman-cyan/50 hover:border-chaman-cyan text-chaman-cyan rounded-2xl transition-all duration-300 shadow-[0_0_15px_rgba(37,204,227,0.2)] flex items-center justify-center active:scale-95">
+                    <i id="audioIcon" class="fa-solid fa-volume-high text-xl"></i>
+                </button>
+            </div>
 
             <!-- Golden Pointer Arrow -->
             <div class="relative z-20 -mb-6 flex flex-col items-center">
@@ -204,25 +183,23 @@
             </div>
         </section>
 
-        <!-- RIGHT COLUMN: LOGO URL, AUTO-REMOVE, PREMIOS FORM, LIST & HISTORY (5 cols on tablet) -->
+        <!-- RIGHT COLUMN: BRANDING, AUTO-REMOVE, PREMIOS FORM, LIST & HISTORY (5 cols on tablet) -->
         <section class="md:col-span-5 flex flex-col gap-5">
 
-            <!-- PANEL DE CONTROL DEL LOGO -->
-            <div class="glass-panel p-4 rounded-3xl border border-[#D3AD71]/40 shadow-[0_0_15px_rgba(211,173,113,0.15)]">
-                <label class="block text-xs text-[#D3AD71] font-bold mb-1.5 uppercase tracking-wider flex items-center justify-between">
-                    <span class="flex items-center gap-2">
-                        <i class="fa-solid fa-link text-[#25CCE3]"></i> URL del Logo Personalizado
-                    </span>
-                    <span class="text-[10px] text-gray-400 font-normal">Círculo automático</span>
-                </label>
-                <div class="flex gap-2">
-                    <input type="text" id="logoUrlInput" placeholder="DelfoLogo.jpeg"
-                        value="DelfoLogo.jpeg"
-                        oninput="handleLogoUrlChange(this.value)"
-                        class="w-full h-11 bg-[#000105]/90 border border-[#D3AD71]/30 focus:border-[#25CCE3] text-white text-xs rounded-xl px-3 outline-none transition-all duration-200 font-semibold placeholder-gray-500">
-                    <button onclick="resetLogoUrl()" title="Restablecer logo original" class="h-11 px-3.5 bg-[#000105] border border-[#D3AD71]/40 hover:border-[#D3AD71] text-[#D3AD71] rounded-xl transition-all duration-200 flex items-center justify-center active:scale-95">
-                        <i class="fa-solid fa-rotate-left text-xs"></i>
-                    </button>
+            <!-- PANEL BRANDING CHAMAN COLLECTIBLES (Reemplaza el selector de URL) -->
+            <div class="glass-panel p-4 rounded-3xl border border-chaman-gold/40 shadow-[0_0_20px_rgba(211,173,113,0.15)] flex items-center gap-4">
+                <div class="relative w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-chaman-gold via-chaman-cyan to-chaman-violet shadow-[0_0_20px_rgba(37,204,227,0.4)] flex-shrink-0">
+                    <img id="headerLogoImg" src="DelfoLogo.jpeg" alt="Chaman Collectibles Logo" 
+                        class="w-full h-full object-cover rounded-full border-2 border-chaman-gold bg-chaman-bg">
+                </div>
+                <div>
+                    <h1 class="font-orbitron text-xl md:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-chaman-cyan via-chaman-jade to-chaman-gold glow-cyan uppercase leading-tight">
+                        CHAMAN <span class="text-chaman-gold glow-gold">COLLECTIBLES</span>
+                    </h1>
+                    <p class="text-xs text-gray-300 font-semibold tracking-widest uppercase flex items-center gap-1.5 mt-0.5">
+                        <span class="inline-block w-2 h-2 rounded-full bg-chaman-jade animate-pulse"></span>
+                        Ruleta Mística TCG &amp; Selección Mística
+                    </p>
                 </div>
             </div>
 
@@ -424,7 +401,7 @@
 
         logoImg.onerror = function() {
             if (logoImg.src !== DEFAULT_LOGO_SVG) {
-                showToast('No se pudo cargar la imagen del logo. Se usará el logo predeterminado.');
+                showToast('Se usará el emblema alternativo si la imagen falla.');
                 logoImg.src = DEFAULT_LOGO_SVG;
             }
         };
@@ -435,16 +412,6 @@
             } else {
                 logoImg.src = url.trim();
             }
-        }
-
-        function handleLogoUrlChange(val) {
-            setLogoSource(val);
-        }
-
-        function resetLogoUrl() {
-            document.getElementById('logoUrlInput').value = 'DelfoLogo.jpeg';
-            setLogoSource('DelfoLogo.jpeg');
-            showToast('Logo restablecido a DelfoLogo.jpeg');
         }
 
         function setupCanvasDPI() {
@@ -653,7 +620,7 @@
                 ctx.strokeStyle = '#000105';
                 ctx.stroke();
 
-                // Slice Text Rendering (Reduced Font Size so names fit comfortably)
+                // Slice Text Rendering
                 ctx.save();
                 ctx.translate(centerX, centerY);
                 ctx.rotate(angle + sliceAngle / 2);
@@ -661,7 +628,6 @@
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = colorObj.text;
 
-                // REDUCED TIPOGRAPHY SIZING
                 let fontSize = Math.max(9, Math.min(13, 200 / numSlices));
                 ctx.font = `bold ${fontSize}px Orbitron, Rajdhani, sans-serif`;
 
@@ -696,7 +662,7 @@
             ctx.strokeStyle = PALETTE.cyan;
             ctx.stroke();
 
-            // Outer Glowing Gems (Cian & Jade)
+            // Outer Glowing Gems
             const numDots = Math.min(24, Math.max(12, numSlices));
             for (let d = 0; d < numDots; d++) {
                 const dotAngle = (d * (2 * Math.PI)) / numDots;
@@ -715,7 +681,6 @@
             // 3. Central Golden Medallion with Strictly Cropped Circular Logo
             ctx.save();
             
-            // Base Medallion Background
             ctx.beginPath();
             ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
             ctx.fillStyle = PALETTE.bg;
@@ -728,7 +693,7 @@
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, innerRadius - 3, 0, 2 * Math.PI);
-                ctx.clip(); // <--- Strict Circular Crop
+                ctx.clip();
 
                 ctx.drawImage(
                     logoImg, 
@@ -740,7 +705,6 @@
                 ctx.restore();
             }
 
-            // Outer Golden Hub Ring
             ctx.beginPath();
             ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
             ctx.lineWidth = 3.5;
@@ -792,7 +756,6 @@
             currentAngle += (spinAngle * Math.PI) / 180;
             drawWheel();
 
-            // Ticking Calculation
             const numSlices = spots.length;
             const sliceAngle = (2 * Math.PI) / numSlices;
             let normalizedAngle = (1.5 * Math.PI - (currentAngle % (2 * Math.PI))) % (2 * Math.PI);
@@ -815,7 +778,6 @@
             spinBtn.disabled = false;
             spinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
 
-            // Winner Calculation
             const numSlices = spots.length;
             const sliceAngle = (2 * Math.PI) / numSlices;
             let normalizedAngle = (1.5 * Math.PI - (currentAngle % (2 * Math.PI))) % (2 * Math.PI);
@@ -824,7 +786,6 @@
             const winningIndex = Math.floor(normalizedAngle / sliceAngle);
             const winningItem = spots[winningIndex];
 
-            // AUTO-REMOVE LOGIC
             const autoRemoveChecked = document.getElementById('autoRemoveToggle').checked;
             let subtextMsg = '¡El destino místico de Chaman Collectibles ha decidido!';
 
@@ -939,7 +900,6 @@
         }
 
         function updateUI() {
-            // RENAMED BADGE TO PREMIOS RESTANTES
             document.getElementById('totalPremiosBadge').innerText = spots.length;
 
             const counts = {};
