@@ -123,7 +123,7 @@
         <div class="flex items-center gap-4">
             <!-- Header Emblem with Strict Circle CSS Cropping -->
             <div class="relative w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-chaman-gold via-chaman-cyan to-chaman-violet shadow-[0_0_20px_rgba(37,204,227,0.4)] flex-shrink-0">
-                <img id="headerLogoImg" src="" alt="Chaman Collectibles Logo" 
+                <img id="headerLogoImg" src="DelfoLogo.jpeg" alt="Chaman Collectibles Logo" 
                     class="w-full h-full object-cover rounded-full border-2 border-chaman-gold bg-chaman-bg">
             </div>
 
@@ -208,23 +208,23 @@
         <section class="md:col-span-5 flex flex-col gap-5">
 
             <!-- PANEL DE CONTROL DEL LOGO -->
-<div class="glass-panel p-4 rounded-3xl border border-[#D3AD71]/40 shadow-[0_0_15px_rgba(211,173,113,0.15)]">
-    <label class="block text-xs text-[#D3AD71] font-bold mb-1.5 uppercase tracking-wider flex items-center justify-between">
-        <span class="flex items-center gap-2">
-            <i class="fa-solid fa-link text-[#25CCE3]"></i> URL del Logo Personalizado
-        </span>
-        <span class="text-[10px] text-gray-400 font-normal">Círculo automático</span>
-    </label>
-    <div class="flex gap-2">
-        <input type="text" id="logoUrlInput" placeholder="DelfoLogo.jpeg"
-            value="DelfoLogo.jpeg"
-            oninput="handleLogoUrlChange(this.value)"
-            class="w-full h-11 bg-[#000105]/90 border border-[#D3AD71]/30 focus:border-[#25CCE3] text-white text-xs rounded-xl px-3 outline-none transition-all duration-200 font-semibold placeholder-gray-500">
-        <button onclick="resetLogoUrl()" title="Restablecer logo original" class="h-11 px-3.5 bg-[#000105] border border-[#D3AD71]/40 hover:border-[#D3AD71] text-[#D3AD71] rounded-xl transition-all duration-200 flex items-center justify-center active:scale-95">
-            <i class="fa-solid fa-rotate-left text-xs"></i>
-        </button>
-    </div>
-</div>
+            <div class="glass-panel p-4 rounded-3xl border border-[#D3AD71]/40 shadow-[0_0_15px_rgba(211,173,113,0.15)]">
+                <label class="block text-xs text-[#D3AD71] font-bold mb-1.5 uppercase tracking-wider flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-link text-[#25CCE3]"></i> URL del Logo Personalizado
+                    </span>
+                    <span class="text-[10px] text-gray-400 font-normal">Círculo automático</span>
+                </label>
+                <div class="flex gap-2">
+                    <input type="text" id="logoUrlInput" placeholder="DelfoLogo.jpeg"
+                        value="DelfoLogo.jpeg"
+                        oninput="handleLogoUrlChange(this.value)"
+                        class="w-full h-11 bg-[#000105]/90 border border-[#D3AD71]/30 focus:border-[#25CCE3] text-white text-xs rounded-xl px-3 outline-none transition-all duration-200 font-semibold placeholder-gray-500">
+                    <button onclick="resetLogoUrl()" title="Restablecer logo original" class="h-11 px-3.5 bg-[#000105] border border-[#D3AD71]/40 hover:border-[#D3AD71] text-[#D3AD71] rounded-xl transition-all duration-200 flex items-center justify-center active:scale-95">
+                        <i class="fa-solid fa-rotate-left text-xs"></i>
+                    </button>
+                </div>
+            </div>
 
             <!-- AUTO-ELIMINATE WINNER TOGGLE SWITCH -->
             <div class="glass-panel p-4 rounded-3xl border border-chaman-gold/40 shadow-[0_0_20px_rgba(211,173,113,0.15)]">
@@ -423,8 +423,10 @@
         };
 
         logoImg.onerror = function() {
-            showToast('No se pudo cargar la URL del logo. Se usará el logo predeterminado.');
-            logoImg.src = DEFAULT_LOGO_SVG;
+            if (logoImg.src !== DEFAULT_LOGO_SVG) {
+                showToast('No se pudo cargar la imagen del logo. Se usará el logo predeterminado.');
+                logoImg.src = DEFAULT_LOGO_SVG;
+            }
         };
 
         function setLogoSource(url) {
@@ -440,9 +442,9 @@
         }
 
         function resetLogoUrl() {
-            document.getElementById('logoUrlInput').value = '';
-            setLogoSource(DEFAULT_LOGO_SVG);
-            showToast('Logo restablecido al original.');
+            document.getElementById('logoUrlInput').value = 'DelfoLogo.jpeg';
+            setLogoSource('DelfoLogo.jpeg');
+            showToast('Logo restablecido a DelfoLogo.jpeg');
         }
 
         function setupCanvasDPI() {
@@ -1072,7 +1074,7 @@
         }
 
         window.onload = function() {
-            setLogoSource('');
+            setLogoSource('DelfoLogo.jpeg');
             setupCanvasDPI();
             loadDemoData();
         };
